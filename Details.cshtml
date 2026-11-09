@@ -1,0 +1,66 @@
+@model EventDetailsViewModel
+@{
+    ViewData["Title"] = Model.Event.Name;
+}
+<a class="rd-back" asp-controller="Home" asp-action="Index">&larr; All events</a>
+
+<div class="rd-card rd-detail mt-2">
+    <img src="@Url.Action("Event", "Images", new { id = Model.Event.EventId })" class="rd-banner rd-banner-lg" alt="Banner for @Model.Event.Name" />
+    <div class="rd-card-body">
+        <span class="badge rd-type rd-type-@Model.Event.EventType.ToLower()">@Model.Event.EventType</span>
+        <h1 class="mt-2">@Model.Event.Name</h1>
+        <p class="rd-meta">
+            @Model.Event.EventDate.ToString("dddd, dd MMMM yyyy") &middot; @Model.Event.Location
+            @if (Model.Event.DistanceKm != null)
+            {
+                <text> &middot; @Model.Event.DistanceKm.Value.ToString("0.##") km</text>
+            }
+        </p>
+        @if (!string.IsNullOrWhiteSpace(Model.Event.Description))
+        {
+            <p>@Model.Event.Description</p>
+        }
+    </div>
+</div>
+
+<h2 class="rd-section">Choose your category</h2>
+@if (!Model.Categories.Any())
+{
+    <div class="rd-empty"><p>The organiser has not added any categories yet. Please check back soon.</p></div>
+}
+else
+{
+    <div class="rd-card">
+        <div class="table-responsive">
+            <table class="table rd-table align-middle mb-0">
+                <thead>
+                    <tr><th>Category</th><th>Distance</th><th>Places</th><th></th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <tr>
+                            <td>@category.Name</td>
+                            <td>@category.DistanceKm.ToString("0.##") km</td>
+                            <td>@category.MaxParticipants</td>
+                            <td class="text-end">
+                                @if (Model.EnrolledCategoryIds.Contains(category.CategoryId))
+                                {
+                                    <span class="badge bg-success rd-status">You are enrolled</span>
+                                }
+                                else
+                                {
+                                    <form asp-controller="Events" asp-action="Enrol" method="post" class="d-inline">
+                                        <input type="hidden" name="eventId" value="@Model.Event.EventId" />
+                                        <input type="hidden" name="categoryId" value="@category.CategoryId" />
+                                        <button type="submit" class="btn btn-primary btn-sm">Enrol</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

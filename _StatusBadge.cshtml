@@ -1,0 +1,20 @@
+@model string
+@{
+    //colour coding: green = good, amber = waiting, red = cancelled
+    string css = "bg-secondary";
+    switch ((Model ?? "").ToLowerInvariant())
+    {
+        case "registered":
+        case "confirmed":
+        case "final":
+            css = "bg-success";
+            break;
+        case "pending":
+            css = "bg-warning text-dark";
+            break;
+        case "cancelled":
+            css = "bg-danger";
+            break;
+    }
+}
+<span class="badge rd-status @css">@Model</span>

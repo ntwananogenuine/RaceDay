@@ -1,0 +1,39 @@
+@{
+    ViewData["Title"] = "Welcome";
+}
+<section class="rd-hero">
+    <div class="rd-hero-copy">
+    <p class="rd-kicker">Run. Walk. Cycle.</p>
+    <h1>Find your next finish line.</h1>
+    <p class="rd-hero-text">RaceDay brings organisers and participants together. Create events, enrol in a category, and see your results the moment they are published.</p>
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-primary btn-lg" asp-controller="Account" asp-action="Register">Join RaceDay</a>
+        <a class="btn btn-outline-light btn-lg" asp-controller="Account" asp-action="Login">Log in</a>
+    </div>
+    </div>
+    <div class="rd-hero-track" aria-hidden="true"></div>
+    <span class="rd-sticker rd-sticker-run" aria-hidden="true">Run</span>
+    <span class="rd-sticker rd-sticker-walk" aria-hidden="true">Walk</span>
+    <span class="rd-sticker rd-sticker-cycle" aria-hidden="true">Cycle</span>
+</section>
+
+<section class="row g-3 mt-2">
+    <div class="col-md-4">
+        <div class="rd-card rd-feature">
+            <h3>For participants</h3>
+            <p>Browse upcoming events, pick your category, enrol in seconds and follow your race history.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="rd-card rd-feature">
+            <h3>For organisers</h3>
+            <p>Create events with a banner, set up categories, see who enrolled and publish the results.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="rd-card rd-feature">
+            <h3>Every distance</h3>
+            <p>From a 5km fun run to a full marathon, runners, walkers and cyclists all have a place.</p>
+        </div>
+    </div>
+</section>

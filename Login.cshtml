@@ -1,0 +1,36 @@
+@model LoginForm
+@{
+    ViewData["Title"] = "Log in";
+}
+<div class="rd-auth">
+    <aside class="rd-auth-art">
+        <p class="rd-kicker">Welcome back</p>
+        <h2 class="rd-auth-title">Pick up where you left off.</h2>
+        <p>Your enrolments, bib numbers and results are waiting for you.</p>
+        <span class="rd-sticker rd-sticker-run" aria-hidden="true">Run</span>
+        <span class="rd-sticker rd-sticker-walk" aria-hidden="true">Walk</span>
+        <span class="rd-sticker rd-sticker-cycle" aria-hidden="true">Cycle</span>
+    </aside>
+    <div class="rd-auth-form">
+        <h1>Log in</h1>
+        @if (ViewBag.Notice != null)
+        {
+            <div class="alert alert-info">@ViewBag.Notice</div>
+        }
+        <form asp-action="Login" method="post" novalidate>
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" autocomplete="email" required />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control" autocomplete="current-password" required />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg w-100">Log in</button>
+        </form>
+        <p class="rd-switch">New to RaceDay? <a asp-action="Register">Create an account</a></p>
+    </div>
+</div>

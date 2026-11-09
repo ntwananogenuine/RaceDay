@@ -1,0 +1,27 @@
+@model EventPickerModel
+<div class="rd-page-head">
+    <h1>@Model.Title</h1>
+</div>
+
+@if (!Model.Events.Any())
+{
+    <div class="rd-empty">
+        <p>You have not created any events yet.</p>
+        <a class="btn btn-primary" asp-controller="ManageEvents" asp-action="Edit">Create an event</a>
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var ev in Model.Events)
+        {
+            <div class="col-md-6 col-lg-4">
+                <a class="rd-pick" asp-controller="@Model.Controller" asp-action="Index" asp-route-eventId="@ev.EventId">
+                    <span class="badge rd-type rd-type-@ev.EventType.ToLower()">@ev.EventType</span>
+                    <h5>@ev.Name</h5>
+                    <p>@ev.EventDate.ToString("dd MMM yyyy") &middot; @ev.Location</p>
+                </a>
+            </div>
+        }
+    </div>
+}
