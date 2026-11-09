@@ -30,6 +30,7 @@ namespace raceday_api.database
                 e.Property(u => u.FullName).HasMaxLength(100).IsUnicode(false).IsRequired();
                 e.Property(u => u.Email).HasMaxLength(150).IsUnicode(false).IsRequired();
                 e.Property(u => u.PasswordHash).HasMaxLength(255).IsUnicode(false).IsRequired();
+                e.Property(u => u.ProfilePicture).HasMaxLength(255).IsUnicode(false);
                 e.Property(u => u.CreatedAt).HasDefaultValueSql("GETDATE()");
                 e.HasIndex(u => u.Email).IsUnique();
                 e.HasOne(u => u.Role).WithMany(r => r.Users)
@@ -43,6 +44,7 @@ namespace raceday_api.database
                 e.Property(x => x.EventDate).HasColumnType("date");
                 e.Property(x => x.Location).HasMaxLength(150).IsUnicode(false).IsRequired();
                 e.Property(x => x.EventType).HasMaxLength(20).IsUnicode(false).IsRequired();
+                e.Property(x => x.BannerImage).HasMaxLength(255).IsUnicode(false);
                 e.Property(x => x.DistanceKm).HasColumnType("decimal(5,2)");
                 e.HasOne(x => x.Organiser).WithMany()
                  .HasForeignKey(x => x.OrganiserId).OnDelete(DeleteBehavior.Restrict);
