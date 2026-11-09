@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320" preserveAspectRatio="xMidYMid slice">
+  <rect width="800" height="320" fill="#6c2bff"/>
+  <g transform="translate(640 330)" stroke="#1a0b2e" stroke-width="4">
+    <circle r="300" fill="#1a0b2e"/>
+    <circle r="260" fill="#ffc21a"/>
+    <circle r="220" fill="#ff2d87"/>
+    <circle r="180" fill="#28c7f0"/>
+    <circle r="140" fill="#9a6cff"/>
+    <circle r="100" fill="#ffffff"/>
+    <circle r="60" fill="#1a0b2e"/>
+  </g>
+  <text x="44" y="150" font-family="Unbounded, Arial Black, Arial, sans-serif" font-size="58" font-weight="900" fill="#ffffff" stroke="#1a0b2e" stroke-width="2" paint-order="stroke" letter-spacing="-2">RACE<tspan fill="#ffc21a">DAY</tspan></text>
+  <text x="46" y="196" font-family="Arial, sans-serif" font-size="22" font-weight="800" fill="#ffffff">Run. Walk. Cycle.</text>
+</svg>
