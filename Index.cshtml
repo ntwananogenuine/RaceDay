@@ -1,41 +1,56 @@
-@model List<MyEnrolmentRow>
+@model DashboardViewModel
 @{
-    ViewData["Title"] = "My enrolments";
+    ViewData["Title"] = "Dashboard";
 }
-<div class="rd-page-head">
-    <h1>My enrolments</h1>
-    <p>The events you have entered and the status of each enrolment.</p>
+<div class="rd-page-head d-flex flex-wrap justify-content-between align-items-end gap-2">
+    <div>
+        <h1>Organiser dashboard</h1>
+        <p>A summary of your events and who has enrolled.</p>
+    </div>
+    <a class="btn btn-primary" asp-controller="ManageEvents" asp-action="Edit">Create an event</a>
 </div>
 
-@if (!Model.Any())
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3"><div class="rd-card rd-stat"><span>@Model.Events.Count</span><p>Events created</p></div></div>
+    <div class="col-6 col-lg-3"><div class="rd-card rd-stat"><span>@Model.TotalEnrolments</span><p>Total enrolments</p></div></div>
+    <div class="col-6 col-lg-3"><div class="rd-card rd-stat"><span>@Model.UpcomingCount</span><p>Upcoming events</p></div></div>
+    <div class="col-6 col-lg-3"><div class="rd-card rd-stat"><span>@(Model.NextEventDate?.ToString("dd MMM") ?? "-")</span><p>Next event</p></div></div>
+</div>
+
+@if (!Model.Events.Any())
 {
     <div class="rd-empty">
-        <p>You have not enrolled for any events yet.</p>
-        <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Find an event</a>
+        <p>You have not created any events yet.</p>
+        <a class="btn btn-primary" asp-controller="ManageEvents" asp-action="Edit">Create your first event</a>
     </div>
 }
 else
 {
+    <h2 class="rd-section">Enrolments per event</h2>
     <div class="rd-card">
         <div class="table-responsive">
             <table class="table rd-table align-middle mb-0">
                 <thead>
-                    <tr><th>Event</th><th>Date</th><th>Category</th><th>Bib</th><th>Status</th><th></th></tr>
+                    <tr><th>Event</th><th>Date</th><th>Location</th><th>Categories</th><th>Enrolments</th><th></th></tr>
                 </thead>
                 <tbody>
-                    @foreach (var row in Model)
+                    @foreach (var item in Model.Events.OrderBy(e => e.Event.EventDate))
                     {
+                        bool upcoming = item.Event.EventDate.Date >= DateTime.Today;
                         <tr>
-                            <td><a asp-controller="Events" asp-action="Details" asp-route-id="@row.Enrolment.EventId">@row.Enrolment.EventName</a></td>
-                            <td>@(row.EventDate?.ToString("dd MMM yyyy") ?? "-")</td>
-                            <td>@row.Enrolment.CategoryName</td>
-                            <td>@row.Enrolment.BibNumber</td>
-                            <td><partial name="_StatusBadge" model="row.Enrolment.Status" /></td>
+                            <td>
+                                @item.Event.Name
+                                @if (upcoming)
+                                {
+                                    <span class="badge bg-warning text-dark rd-status ms-1">Upcoming</span>
+                                }
+                            </td>
+                            <td>@item.Event.EventDate.ToString("dd MMM yyyy")</td>
+                            <td>@item.Event.Location</td>
+                            <td>@item.CategoryCount</td>
+                            <td><strong>@item.EnrolmentCount</strong></td>
                             <td class="text-end">
-                                <form asp-action="Cancel" method="post" onsubmit="return confirm('Cancel this enrolment?');">
-                                    <input type="hidden" name="id" value="@row.Enrolment.EnrolmentId" />
-                                    <button type="submit" class="btn btn-outline-danger btn-sm">Cancel</button>
-                                </form>
+                                <a class="btn btn-outline-primary btn-sm" asp-controller="ManageEnrolments" asp-action="Index" asp-route-eventId="@item.Event.EventId">View enrolments</a>
                             </td>
                         </tr>
                     }

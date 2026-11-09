@@ -1,0 +1,83 @@
+@model RegisterForm
+@{
+    ViewData["Title"] = "Sign up";
+}
+<div class="rd-auth">
+    <aside class="rd-auth-art">
+        <p class="rd-kicker">New runner, walker or rider</p>
+        <h2 class="rd-auth-title">Get your bib.</h2>
+        <div class="rd-bib-live" aria-hidden="true">
+            <span class="rd-bib-live-brand">RACE<span>DAY</span></span>
+            <span class="rd-bib-live-name" id="bibName">Your name</span>
+            <span class="rd-bib-live-role" id="bibRole">Choose a role</span>
+        </div>
+        <p>Type your name and watch your bib fill in.</p>
+    </aside>
+    <div class="rd-auth-form">
+        <h1>Join RaceDay</h1>
+        <form asp-action="Register" method="post" novalidate>
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+            <div class="mb-3">
+                <label asp-for="FullName" class="form-label"></label>
+                <input asp-for="FullName" class="form-control" autocomplete="name" required />
+                <span asp-validation-for="FullName" class="text-danger small"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" autocomplete="email" required />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" class="form-control" autocomplete="new-password" required />
+                    <span asp-validation-for="Password" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="ConfirmPassword" class="form-label"></label>
+                    <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" required />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                </div>
+            </div>
+            <div class="mb-4">
+                <span class="form-label d-block">Your role</span>
+                <div class="rd-roles">
+                    <label class="rd-role">
+                        <input type="radio" asp-for="Role" id="role_participant" value="Participant" required />
+                        <span class="rd-role-card"><strong>Participant</strong><small>I want to take part in events</small></span>
+                    </label>
+                    <label class="rd-role">
+                        <input type="radio" asp-for="Role" id="role_organiser" value="Organiser" required />
+                        <span class="rd-role-card"><strong>Organiser</strong><small>I want to host events</small></span>
+                    </label>
+                </div>
+                <span asp-validation-for="Role" class="text-danger small"></span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg w-100">Create account</button>
+        </form>
+        <p class="rd-switch">Already have an account? <a asp-action="Login">Log in</a></p>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var nameInput = document.getElementById('FullName');
+            var bibName = document.getElementById('bibName');
+            var bibRole = document.getElementById('bibRole');
+            if (nameInput && bibName) {
+                var showName = function () { bibName.textContent = nameInput.value.trim() || 'Your name'; };
+                nameInput.addEventListener('input', showName);
+                showName();
+            }
+            var roles = document.querySelectorAll('input[name="Role"]');
+            for (var i = 0; i < roles.length; i++) {
+                (function (radio) {
+                    var showRole = function () { if (radio.checked && bibRole) { bibRole.textContent = radio.value; } };
+                    radio.addEventListener('change', showRole);
+                    showRole();
+                })(roles[i]);
+            }
+        })();
+    </script>
+}
