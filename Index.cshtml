@@ -1,16 +1,17 @@
-@model List<MyResultRow>
+@model List<MyEnrolmentRow>
 @{
-    ViewData["Title"] = "My results";
+    ViewData["Title"] = "My enrolments";
 }
 <div class="rd-page-head">
-    <h1>My results</h1>
-    <p>Your race history across the events you took part in.</p>
+    <h1>My enrolments</h1>
+    <p>The events you have entered and the status of each enrolment.</p>
 </div>
 
 @if (!Model.Any())
 {
     <div class="rd-empty">
-        <p>No results yet. Results appear here once an organiser publishes them after the event.</p>
+        <p>You have not enrolled for any events yet.</p>
+        <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Find an event</a>
     </div>
 }
 else
@@ -19,28 +20,23 @@ else
         <div class="table-responsive">
             <table class="table rd-table align-middle mb-0">
                 <thead>
-                    <tr><th>Event</th><th>Date</th><th>Category</th><th>Finish time</th><th>Position</th><th>Status</th></tr>
+                    <tr><th>Event</th><th>Date</th><th>Category</th><th>Bib</th><th>Status</th><th></th></tr>
                 </thead>
                 <tbody>
                     @foreach (var row in Model)
                     {
                         <tr>
-                            <td>@row.EventName</td>
+                            <td><a asp-controller="Events" asp-action="Details" asp-route-id="@row.Enrolment.EventId">@row.Enrolment.EventName</a></td>
                             <td>@(row.EventDate?.ToString("dd MMM yyyy") ?? "-")</td>
-                            <td>@row.CategoryName</td>
-                            <td class="rd-time">@fmt.time(row.FinishTime)</td>
-                            <td>
-                                @if (row.Position != null)
-                                {
-                                    <strong>@fmt.ordinal(row.Position.Value)</strong>
-                                    <span class="text-muted"> out of @row.TotalFinishers finishers</span>
-                                }
-                                else
-                                {
-                                    <span>-</span>
-                                }
+                            <td>@row.Enrolment.CategoryName</td>
+                            <td>@row.Enrolment.BibNumber</td>
+                            <td><partial name="_StatusBadge" model="row.Enrolment.Status" /></td>
+                            <td class="text-end">
+                                <form asp-action="Cancel" method="post" onsubmit="return confirm('Cancel this enrolment?');">
+                                    <input type="hidden" name="id" value="@row.Enrolment.EnrolmentId" />
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Cancel</button>
+                                </form>
                             </td>
-                            <td><partial name="_StatusBadge" model="row.Status" /></td>
                         </tr>
                     }
                 </tbody>
