@@ -1,40 +1,50 @@
-@model UserInfo
+@model List<MyResultRow>
 @{
-    ViewData["Title"] = "My profile";
+    ViewData["Title"] = "My results";
 }
 <div class="rd-page-head">
-    <h1>My profile</h1>
-    <p>Update your personal information and your profile picture.</p>
+    <h1>My results</h1>
+    <p>Your race history across the events you took part in.</p>
 </div>
 
-<div class="row g-4">
-    <div class="col-md-4">
-        <div class="rd-card rd-form-card text-center">
-            <img src="@Url.Action("Profile", "Images")" class="rd-avatar-lg" alt="Your profile picture" />
-            <h5 class="mt-3 mb-0">@Model.FullName</h5>
-            <p><span class="badge rd-role-badge">@Model.Role</span></p>
-            <form asp-action="Picture" method="post" enctype="multipart/form-data">
-                <input type="file" name="picture" class="form-control mb-2" accept="image/png,image/jpeg,image/gif,image/webp" required />
-                <button type="submit" class="btn btn-outline-primary btn-sm w-100">Upload picture</button>
-            </form>
-            <p class="rd-meta mt-2">JPG, PNG, GIF or WebP, up to 5 MB.</p>
+@if (!Model.Any())
+{
+    <div class="rd-empty">
+        <p>No results yet. Results appear here once an organiser publishes them after the event.</p>
+    </div>
+}
+else
+{
+    <div class="rd-card">
+        <div class="table-responsive">
+            <table class="table rd-table align-middle mb-0">
+                <thead>
+                    <tr><th>Event</th><th>Date</th><th>Category</th><th>Finish time</th><th>Position</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in Model)
+                    {
+                        <tr>
+                            <td>@row.EventName</td>
+                            <td>@(row.EventDate?.ToString("dd MMM yyyy") ?? "-")</td>
+                            <td>@row.CategoryName</td>
+                            <td class="rd-time">@fmt.time(row.FinishTime)</td>
+                            <td>
+                                @if (row.Position != null)
+                                {
+                                    <strong>@fmt.ordinal(row.Position.Value)</strong>
+                                    <span class="text-muted"> out of @row.TotalFinishers finishers</span>
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
+                            </td>
+                            <td><partial name="_StatusBadge" model="row.Status" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
-    <div class="col-md-8">
-        <div class="rd-card rd-form-card">
-            <h4>Personal information</h4>
-            <form asp-action="Update" method="post">
-                <div class="mb-3">
-                    <label class="form-label" for="fullName">Full name</label>
-                    <input id="fullName" name="fullName" value="@Model.FullName" class="form-control" maxlength="100" required />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="email">Email</label>
-                    <input id="email" name="email" type="email" value="@Model.Email" class="form-control" maxlength="150" required />
-                </div>
-                <p class="rd-meta">Member since @Model.CreatedAt.ToString("dd MMM yyyy")</p>
-                <button type="submit" class="btn btn-primary">Save changes</button>
-            </form>
-        </div>
-    </div>
-</div>
+}
